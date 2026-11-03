@@ -1,0 +1,511 @@
+@startuml
+
+
+title Sistema de Préstamo de Equipos del Laboratorio
+
+
+' =========================
+
+
+' CLASES DE PERSONAS
+
+
+' =========================
+
+
+abstract class Persona {
+
+
+    - documento : String
+
+
+    - nombre : String
+
+
+    + Persona(documento, nombre)
+
+
+    + getDocumento() : String
+
+
+    + getNombre() : String
+
+
+    + setNombre(nombre) : void
+
+
+    + getDiasMaximosPrestamo() : int
+
+
+    + getMaximoEquipos() : int
+
+
+}
+
+
+class Estudiante {
+
+
+    - programaAcademico : String
+
+
+    + Estudiante(documento, nombre, programaAcademico)
+
+
+    + getProgramaAcademico() : String
+
+
+    + getDiasMaximosPrestamo() : int
+
+
+    + getMaximoEquipos() : int
+
+
+}
+
+
+class Docente {
+
+
+    - dependencia : String
+
+
+    + Docente(documento, nombre, dependencia)
+
+
+    + getDependencia() : String
+
+
+    + getDiasMaximosPrestamo() : int
+
+
+    + getMaximoEquipos() : int
+
+
+}
+
+
+Persona <|-- Estudiante
+
+
+Persona <|-- Docente
+
+
+' =========================
+
+
+' CLASES DE EQUIPOS
+
+
+' =========================
+
+
+abstract class Equipo {
+
+
+    - codigo : String
+
+
+    - marca : String
+
+
+    - disponible : boolean
+
+
+    + Equipo(codigo, marca)
+
+
+    + getCodigo() : String
+
+
+    + getMarca() : String
+
+
+    + isDisponible() : boolean
+
+
+    + cambiarDisponibilidad(disponible) : void
+
+
+    + getMultaPorDia() : double
+
+
+}
+
+
+class Portatil {
+
+
+    - memoriaRAM : int
+
+
+    - cargador : Cargador
+
+
+    + Portatil(codigo, marca, memoriaRAM, serial, vatios)
+
+
+    + getMemoriaRAM() : int
+
+
+    + getCargador() : Cargador
+
+
+    + getMultaPorDia() : double
+
+
+}
+
+
+class Proyector {
+
+
+    - lumenes : int
+
+
+    + Proyector(codigo, marca, lumenes)
+
+
+    + getLumenes() : int
+
+
+    + getMultaPorDia() : double
+
+
+}
+
+
+class Tablet {
+
+
+    + Tablet(codigo, marca)
+
+
+    + getMultaPorDia() : double
+
+
+}
+
+
+class Cargador {
+
+
+    - serial : String
+
+
+    - vatios : int
+
+
+    + Cargador(serial, vatios)
+
+
+    + getSerial() : String
+
+
+    + getVatios() : int
+
+
+}
+
+
+Equipo <|-- Portatil
+
+
+Equipo <|-- Proyector
+
+
+Equipo <|-- Tablet
+
+
+Portatil *-- Cargador
+
+
+' =========================
+
+
+' CLASE PRESTAMO
+
+
+' =========================
+
+
+class Prestamo {
+
+
+    - contador : int
+
+
+    - numero : int
+
+
+    - persona : Persona
+
+
+    - equipos : ArrayList<Equipo>
+
+
+    - diasUsados : int
+
+
+    - diasRetraso : int
+
+
+    - devuelto : boolean
+
+
+    + Prestamo(persona, equipos)
+
+
+    + getNumero() : int
+
+
+    + getPersona() : Persona
+
+
+    + getEquipos() : ArrayList<Equipo>
+
+
+    + devolver(diasUsados) : void
+
+
+    + calcularMulta() : double
+
+
+    + isDevuelto() : boolean
+
+
+}
+
+
+Prestamo o-- Persona
+
+
+Prestamo o-- "1..*" Equipo
+
+
+' =========================
+
+
+' INTERFACES
+
+
+' =========================
+
+
+interface AlmacenamientoPrestamos {
+
+
+    + guardar(prestamo) : void
+
+
+    + obtenerPrestamos() : ArrayList<Prestamo>
+
+
+}
+
+
+interface ReglaMulta {
+
+
+    + calcularMulta(prestamo) : double
+
+
+}
+
+
+interface Aviso {
+
+
+    + notificar(persona, mensaje) : void
+
+
+}
+
+
+' =========================
+
+
+' IMPLEMENTACIONES
+
+
+' =========================
+
+
+class AlmacenamientoMemoria {
+
+
+    - prestamos : ArrayList<Prestamo>
+
+
+    + AlmacenamientoMemoria()
+
+
+    + guardar(prestamo) : void
+
+
+    + obtenerPrestamos() : ArrayList<Prestamo>
+
+
+}
+
+
+class MultaNormal {
+
+
+    + calcularMulta(prestamo) : double
+
+
+}
+
+
+class MultaSemanaUniversitaria {
+
+
+    + calcularMulta(prestamo) : double
+
+
+}
+
+
+class AvisoConsola {
+
+
+    + notificar(persona, mensaje) : void
+
+
+}
+
+
+AlmacenamientoPrestamos <|.. AlmacenamientoMemoria
+
+
+ReglaMulta <|.. MultaNormal
+
+
+ReglaMulta <|.. MultaSemanaUniversitaria
+
+
+Aviso <|.. AvisoConsola
+
+
+' =========================
+
+
+' SERVICIO DE PRESTAMOS
+
+
+' =========================
+
+
+class ServicioPrestamos {
+
+
+    - almacenamiento : AlmacenamientoPrestamos
+
+
+    - reglaMulta : ReglaMulta
+
+
+    - aviso : Aviso
+
+
+    - totalMultas : double
+
+
+    + ServicioPrestamos(almacenamiento, reglaMulta, aviso)
+
+
+    + prestar(persona, equipo) : Prestamo
+
+
+    + prestar(persona, equipos) : Prestamo
+
+
+    + devolver(prestamo, diasUsados) : void
+
+
+    + getTotalMultas() : double
+
+
+}
+
+
+ServicioPrestamos --> AlmacenamientoPrestamos
+
+
+ServicioPrestamos --> ReglaMulta
+
+
+ServicioPrestamos --> Aviso
+
+
+ServicioPrestamos --> Prestamo
+
+
+' =========================
+
+
+' REPORTE DE INVENTARIO
+
+
+' =========================
+
+
+class ReporteInventario {
+
+
+    - equipos : ArrayList<Equipo>
+
+
+    + ReporteInventario(equipos)
+
+
+    + mostrarInventario() : void
+
+
+}
+
+
+ReporteInventario --> Equipo
+
+
+' =========================
+
+
+' CLASE PRINCIPAL
+
+
+' =========================
+
+
+class Main {
+
+
+    + main(args) : void
+
+
+}
+
+
+Main --> ServicioPrestamos
+
+
+Main --> ReporteInventario
+
+
+Main --> Estudiante
+
+
+Main --> Docente
+
+
+Main --> Portatil
+
+
+Main --> Proyector
+
+
+Main --> Tablet
+
+
+@enduml
