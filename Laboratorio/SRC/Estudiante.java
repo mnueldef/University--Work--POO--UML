@@ -1,33 +1,26 @@
 public class Estudiante extends Persona {
-    // atributo propio del estudiante
     private String programaAcademico;
-    // Constructor
+
     public Estudiante(String documento, String nombre, String programaAcademico) {
         super(documento, nombre);
         this.programaAcademico = programaAcademico;
     }
 
-    // Método para obtener el programa académico
-
     public String getProgramaAcademico() {
         return programaAcademico;
-
-
     }
 
-    // Método para establecer los días máximos de préstamo
+    public void setProgramaAcademico(String programaAcademico) {
+        this.programaAcademico = programaAcademico;
+    }
 
     @Override
-
-
     public int getDiasMaximosPrestamo() {
-        return 3;
+        return 3; // Máximo 3 días de préstamo para estudiantes
     }
-    // Método para establecer el máximo de equipos permitidos
+
     @Override
-    public int getMaximoEquipos() {
-        return 1;
-
-
+    public int getEquiposMaximos() {
+        return 1; // Máximo 1 equipo a la vez
     }
 }

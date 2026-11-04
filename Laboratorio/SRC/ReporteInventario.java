@@ -1,35 +1,17 @@
-import java.util.ArrayList;
-// Clase que muestra el inventario
+import java.util.List;
+
 public class ReporteInventario {
-    private ArrayList<Equipo> equipos;
 
-    // Constructor
-    public ReporteInventario(ArrayList<Equipo> equipos) {
-
-
-        this.equipos = equipos;
-
-
+    public ReporteInventario() {
+        // Constructor vacío explícito
     }
 
-    // Mostrar todos los equipos
-    public void mostrarInventario() {
-        System.out.println("\n===== INVENTARIO DEL LABORATORIO =====");
+    public void imprimirInventario(List<Equipo> equipos) {
+        System.out.println("\n========== REPORTE DE INVENTARIO ==========");
         for (Equipo equipo : equipos) {
-            System.out.println("Código: " + equipo.getCodigo());
-            System.out.println("Marca: " + equipo.getMarca());
-            if (equipo.isDisponible()) {
-                System.out.println("Estado: Disponible");
-            } else {
-                System.out.println("Estado: Prestado");
-            }
-            System.out.println("--------------------------------");
-
-
+            String estado = equipo.isDisponible() ? "DISPONIBLE" : "PRESTADO";
+            System.out.println("- [" + estado + "] " + equipo.getMarca() + " (Código: " + equipo.getCodigo() + ")");
         }
-
-
+        System.out.println("===========================================");
     }
-
-
 }

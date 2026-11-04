@@ -1,45 +1,28 @@
 public abstract class Persona {
-    // Atributos privados
-   private final String documento;
+    private final String documento; // Inmutable, nunca cambia
     private String nombre;
-    // Constructor
+
     public Persona(String documento, String nombre) {
+        if (documento == null || documento.trim().isEmpty()) {
+            throw new IllegalArgumentException("El documento es obligatorio.");
+        }
         this.documento = documento;
         this.nombre = nombre;
-
-
     }
-    // Método para obtener el documento
 
     public String getDocumento() {
         return documento;
-
-
     }
-    // Método para obtener el nombre
 
     public String getNombre() {
-
         return nombre;
-
-
     }
-
-
-    // Método para cambiar el nombre
-
 
     public void setNombre(String nombre) {
-
-
         this.nombre = nombre;
-
-
     }
-    // Método abstracto para conocer los días máximos de préstamo
+
+    // Métodos abstractos para polimorfismo puro (Sección 2 y 6)
     public abstract int getDiasMaximosPrestamo();
-    // Método abstracto para conocer el máximo de equipos permitidos
-    public abstract int getMaximoEquipos();
-
-
+    public abstract int getEquiposMaximos();
 }
